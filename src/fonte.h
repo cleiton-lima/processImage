@@ -1,4 +1,22 @@
+#ifndef FONTE_H
+#define FONTE_H
 #include <math.h>
+#include <stdio.h>
+#include "fontetype.h"
+
+void skipComments(FILE *file_img) {
+    char buffer = fgetc(file_img);
+
+    do {
+        if (buffer == '#')
+            while (buffer != '\n')
+                buffer = fgetc(file_img);
+        else
+            ungetc(buffer, file_img);
+        buffer = fgetc(file_img);
+    } while (buffer == '#');
+    ungetc(buffer, file_img);
+}
 
 /* Abre e lê um arquivo de imagem */
 FILE  *lerImagem(char filename[]){
@@ -18,7 +36,7 @@ FILE  *lerImagem(char filename[]){
 
 /* Função para alocar imagens na memória*/
 
-Imagem *buildImage(int width, int height){
+Imagem * buildImage(int width, int height){
     int i = 0;
 
     Imagem *imagem = malloc(sizeof(Imagem));
@@ -39,7 +57,7 @@ Imagem *buildImage(int width, int height){
     return imagem;
 }
 
-Imagem * getImage(FILE *file){
+Imagem * getImagem(FILE *file){
 	char header[3];
 	int width, height, i, j, tamanhoMaximo;
 
@@ -111,7 +129,7 @@ int salvarImagem(char *file, Imagem *imagem, int arqu){
     for(i = 0; i < imagem->height; i++){
 		for(j = 0; j < imagem->width; j++){
 			if(imagem->pixels[i][j].r > 255) imagem->pixels[i][j].r = 255;
-			if(imagem->pixels[i][j].b > 255) imagem->pixels[i][j].g = 255;
+			if(imagem->pixels[i][j].g > 255) imagem->pixels[i][j].g = 255;
 			if(imagem->pixels[i][j].b > 255) imagem->pixels[i][j].b = 255;
 			fprintf(fileName, "%d\n", imagem->pixels[i][j].r);
 			fprintf(fileName, "%d\n", imagem->pixels[i][j].g);
@@ -121,3 +139,4 @@ int salvarImagem(char *file, Imagem *imagem, int arqu){
 
     fclose(fileName);
 }
+#endif
