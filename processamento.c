@@ -17,10 +17,10 @@ int main(int argc, char const *argv[])
     strcat(Nome, arg);
 
     FILE *file1 = lerImagem(Nome);
-    Imagem *imagem1 = getImage(file1);
+    Imagem *imagem1 = getImagem(file1);
 
     // FILE *file2 = readFile(Nome);
-    // Imagem *imagem2 = getImage(file2);
+    // Imagem *imagem2 = getImagem(file2);
 
     /*Retorno de dimensões das imagens*/
     printf ("<==================Dimensões da imagem==================>\n");

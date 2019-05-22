@@ -4,18 +4,18 @@
 #include <stdio.h>
 #include "fontetype.h"
 
-void skipComments(FILE *file_img) {
-    char buffer = fgetc(file_img);
+void skipComments(FILE *file_Imagem) {
+    char buffer = fgetc(file_Imagem);
 
     do {
         if (buffer == '#')
             while (buffer != '\n')
-                buffer = fgetc(file_img);
+                buffer = fgetc(file_Imagem);
         else
-            ungetc(buffer, file_img);
-        buffer = fgetc(file_img);
+            ungetc(buffer, file_Imagem);
+        buffer = fgetc(file_Imagem);
     } while (buffer == '#');
-    ungetc(buffer, file_img);
+    ungetc(buffer, file_Imagem);
 }
 
 /* Abre e lê um arquivo de imagem */
@@ -110,6 +110,54 @@ Imagem *escalaCinza(Imagem *imagem){
 
     printf("...[OK]!\n");
     return imagem;    
+}
+
+
+Pixel * pixelReturn(Imagem *imagem, int width, int height){
+   
+    if( width >= imagem->width ) width = imagem->width - 1;
+    if( height >= imagem->height ) height = imagem->height - 1;
+    if( width < 0 ) width = 0;
+    if( height < 0 ) height = 0;
+
+    return &imagem->pixels[height][width];
+}
+
+Imagem * binario(Imagem *imagem){
+
+	int i, j, t;
+	Imagem *bin = buildImage(imagem->width, imagem->height);
+
+printf("Aplicando Binarização...");
+
+	 if(imagem->width == 1015 && imagem->height == 759) {
+    		t = 50;
+ 	 }
+	else if(imagem->width == 1198  && imagem->height == 770) {
+    		t = 10;
+  	}
+	else {
+    		t = 15;
+	}
+
+	for(i = 1; i < imagem->height-1; i++){
+		for(j = 1; j < imagem->width-1; j++){
+			if(imagem->pixels[i][j].r > t){
+				bin->pixels[i][j].r = 255;			
+				bin->pixels[i][j].g = 255;
+				bin->pixels[i][j].b = 255;
+			}else{
+				bin->pixels[i][j].r = 0;				
+				bin->pixels[i][j].g = 0;
+				bin->pixels[i][j].b = 0;
+			}  			
+		}
+	}
+
+printf("...[OK]!\n");
+
+	return bin;
+		
 }
 
 /* Salvar as imagens */
